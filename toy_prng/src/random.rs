@@ -67,7 +67,7 @@ mod test {
         });
     }
     #[test]
-    fn test_next_types() {
+    fn test_generic_types() {
         let mut rng = RandomNumberGenerator::new();
         let _: i32 = rng.generic();
         let _ = rng.generic::<f32>();

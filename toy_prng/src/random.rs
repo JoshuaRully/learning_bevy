@@ -1,7 +1,23 @@
-use rand::{Rng, SeedableRng, distributions::uniform::SampleRange, prelude::StdRng};
+use rand::{Rng, SeedableRng, distributions::uniform::SampleRange};
+
+#[cfg(all(not(feature = "xorshift"), not(feature = "pcg")))]
+type RngCore = rand::prelude::StdRng;
+
+#[cfg(feature = "xorshift")]
+type RngCore = rand_xorshift::XorShiftRng;
+
+#[cfg(feature = "pcg")]
+type RngCore = pcg_rand::Pcg64Fast;
+
 
 pub struct RandomNumberGenerator {
-    rng: StdRng,
+    rng: RngCore
+}
+
+impl Default for RandomNumberGenerator {
+    fn default() -> Self {
+        Self::new()
+    }
 }
 
 /*
@@ -10,12 +26,12 @@ pub struct RandomNumberGenerator {
 impl RandomNumberGenerator {
     pub fn new() -> Self {
         Self {
-            rng: StdRng::from_entropy(),
+            rng: RngCore::from_entropy(),
         }
     }
     pub fn seeded(seed: u64) -> Self {
         Self {
-            rng: StdRng::seed_from_u64(seed),
+            rng: RngCore::seed_from_u64(seed),
         }
     }
     pub fn range<T>(&mut self, range: impl SampleRange<T>) -> T
@@ -32,12 +48,6 @@ impl RandomNumberGenerator {
     {
         // r# required to use gen as an identifier
         self.rng.r#gen()
-    }
-}
-
-impl Default for RandomNumberGenerator {
-    fn default() -> Self {
-        Self::new()
     }
 }
 

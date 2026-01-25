@@ -4,7 +4,14 @@ version = "0.1.0"
 edition = "2024"
 
 [dependencies]
-rand = "0.8"
+rand = { workspace = true }
+pcg_rand = { workspace = true, optional = true }
+rand_xorshift = { workspace = true, optional = true }
+
+[features]
+default = [ "xorshift" ]
+pcg = [ "pcg_rand" ]
+xorshift = [ "rand_xorshift" ]
 
 [dev-dependencies]
 criterion = { version = "0.5", features = [ "html_reports" ] }

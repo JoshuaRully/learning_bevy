@@ -14,6 +14,7 @@ bevy = { workspace = true }
 default = [ "pcg" ]
 pcg = [ "rand_pcg" ]
 xorshift = [ "rand_xorshift" ]
+locking = []
 
 [dev-dependencies]
 criterion = { version = "0.5", features = [ "html_reports" ] }

@@ -4,13 +4,15 @@ version = "0.1.0"
 edition = "2024"
 
 [dependencies]
-rand = { workspace = true }
-pcg_rand = { workspace = true, optional = true }
-rand_xorshift = { workspace = true, optional = true }
+rand = "0.8"
+rand_pcg = { version = "0.3", optional = true }
+rand_xorshift = { version = "0.3", optional = true }
+bevy = { workspace = true }
+
 
 [features]
-default = [ "xorshift" ]
-pcg = [ "pcg_rand" ]
+default = [ "pcg" ]
+pcg = [ "rand_pcg" ]
 xorshift = [ "rand_xorshift" ]
 
 [dev-dependencies]

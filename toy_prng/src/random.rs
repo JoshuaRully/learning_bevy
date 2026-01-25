@@ -1,3 +1,4 @@
+use bevy::ecs::resource::Resource;
 use rand::{Rng, SeedableRng, distributions::uniform::SampleRange};
 
 #[cfg(all(not(feature = "xorshift"), not(feature = "pcg")))]
@@ -7,9 +8,9 @@ type RngCore = rand::prelude::StdRng;
 type RngCore = rand_xorshift::XorShiftRng;
 
 #[cfg(feature = "pcg")]
-type RngCore = pcg_rand::Pcg64Fast;
+type RngCore = rand_pcg::Pcg64Mcg;
 
-
+#[derive(Resource)]
 pub struct RandomNumberGenerator {
     rng: RngCore
 }
@@ -91,5 +92,13 @@ mod test {
             assert!(n > -5000.0);
             assert!(n < 5000.0);
         }
+    }
+}
+
+pub struct ToyPrngPlugin;
+
+impl bevy::prelude::Plugin for ToyPrngPlugin {
+    fn build(&self, app: &mut bevy::prelude::App) {
+        app.insert_resource(RandomNumberGenerator::new());
     }
 }
